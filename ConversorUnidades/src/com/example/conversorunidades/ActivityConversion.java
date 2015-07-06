@@ -48,15 +48,15 @@ public class ActivityConversion extends Activity {
 	private Button btn2;
 	private Spinner spAux;
 	private TextView tvAux;
+	private Integer idTipoUnidad = 0;
+	private String nombreTipoUnidad;
+	private double resultado;
+	private int seleccion1;
+	private int seleccion2;
+	private Double cotizacion;
+	private String valorIng="";
+	private ArrayList<String> resultados = new ArrayList<String>();
 	
-	
-	Integer idTipoUnidad = 0;
-	String nombreTipoUnidad;
-	double resultado;
-	int seleccion1;
-	int seleccion2;
-	Double cotizacion;
-	String valorIng="";
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activityconversion);
@@ -69,6 +69,11 @@ public class ActivityConversion extends Activity {
 		tvAux = (TextView)findViewById(R.id.tvAux);
 		if(!valorIng.equals("")){
 			et1.setText(valorIng);
+		}
+		
+		if(!resultados.isEmpty()){
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, resultados);
+			lv2.setAdapter(adapter);
 		}
 		if(Configuracion.getTema().equals("Lima")){
     		getWindow().getDecorView().setBackgroundColor(Color.parseColor("#CDDC39"));
@@ -369,6 +374,7 @@ public class ActivityConversion extends Activity {
 			  int resultadoFinalInt = resultadoFinal.intValue();
 			  if(resultadoFinal == resultadoFinalInt){
 				  resultadosTodos.add(nombresTodos.get(i)+" "+resultadoFinalInt);
+				  
 			  }else{
 				  DecimalFormat formateador = new DecimalFormat("0.000000");
 				  resFinal = formateador.format(resultadoFinal);
@@ -377,6 +383,7 @@ public class ActivityConversion extends Activity {
 			  
 			 
 		   }
+		   resultados = resultadosTodos;
 		   Collections.sort(resultadosTodos);
 		   ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, resultadosTodos);
 		   
@@ -388,7 +395,7 @@ public class ActivityConversion extends Activity {
 			   String from = sp1.getSelectedItem().toString().substring(0, 3);
 			   String to = spAux.getSelectedItem().toString().substring(0, 3);
 			   //Toast.makeText(this, to, Toast.LENGTH_SHORT).show();
-               getCelsius(from, to);
+               getCotizacion(from, to);
            } else {
                Toast.makeText(this, R.string.activityConversion_ingValor, Toast.LENGTH_LONG).show();
            }
@@ -426,7 +433,7 @@ public class ActivityConversion extends Activity {
 	        }
 	    });
 
-	   private final void getCelsius(final String fromCurr, final String toCurr) {
+	   private final void getCotizacion(final String fromCurr, final String toCurr) {
 	        new Thread(new Runnable() {
 
 	            @Override
