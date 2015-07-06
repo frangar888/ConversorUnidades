@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.conversorunidades.MainActivity" >
+
+    <item
+        android:id="@+id/app_config"
+        android:orderInCategory="101"
+        android:title="@string/app_config"
+        app:showAsAction="never"/>
+    <item android:id="@+id/app_acercaDe" android:title="@string/app_acercaDe" android:orderInCategory="102"></item>
+    <item android:id="@+id/app_salir" android:title="@string/app_salir" android:orderInCategory="103"></item>
+    <item android:id="@+id/app_mis_unidades" android:title="@string/app_mis_unidades" android:orderInCategory="100"></item>
+
+</menu>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    
+    android:orientation="vertical" >
+
+    <Spinner
+        android:id="@+id/sp1"
+        android:layout_width="match_parent"
+        
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:id="@+id/spAux"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/et1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+       
+        android:hint="@string/activityConversion_Hint"
+        android:inputType="numberDecimal" >
+
+        <requestFocus />
+    </EditText>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btn1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/tick1"
+            android:onClick="calcular"
+            android:text="@string/activityConversion_btn_Convertir"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/btn2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/refresh"
+            android:onClick="limpiar"
+            android:text="@string/activityConversion_btn_Limpiar"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
+    <TextView
+        android:id="@+id/tvAux"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       
+        android:paddingTop="10dp"
+        android:text="TextView"
+        android:textColor="#000000"
+        android:textSize="30sp" />
+
+</LinearLayout>

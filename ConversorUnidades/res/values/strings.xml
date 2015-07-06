@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">UConverter 1.0</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="seleccione_tipo_unidad">Seleccione tipo de Unidad</string>
+    <string name="app_config">Configuración</string>
+    <string name="app_acercaDe">Acerca De&#8230;</string>
+    <string name="app_salir">Salir</string>
+    <string name="app_mis_unidades">Mis Unidades</string>
+    <string name="menuEliminar">Eliminar</string>
+    <string name="misUnidades_titulo">Mis Unidades</string>
+    <string name="menuModificar">Modificar</string>
+    <string name="misUnidades_btn_nuevo">Nueva Unidad</string>
+    <string name="activityConversion_btn_Convertir">Convertir!</string>
+    <string name="activityConversion_btn_Limpiar">Limpiar</string>
+    <string name="activityConversion_Hint">Ingrese un valor&#8230;</string>
+    <string name="activityConversion_ingValor">Ingrese un valor&#8230;</string>
+    <string name="miUnidad_ayuda">Ayuda</string>
+     <string name="miUnidad_ejemplo">Ejemplo:1cm = 0.01m</string>
+     <string name="miUnidad_error">Error</string>
+     <string name="miUnidad_yaExiste">El nombre de la unidad ya existe</string>
+     <string name="nuevaUnidad_camposOblig">El nombre, la abreviatura y la referencia son campos obligatorios.</string>
+     <string name="config_lenguage">Idioma</string>
+     <string name="config_titulo">Configuracion</string>
+     <string name="config_btnGuardar">Guardar</string>
+     <string name="config_tema">Tema</string>
+     <string name="main_actualizando">Actualizando Datos</string>
+     <string name="espanol">Español</string>
+	 <string name="ingles">Ingles</string>
+	 <string name="portugues">Portugues</string>
+	 <string name="naranja">Naranja</string>
+      <string name="celeste">Celeste</string>
+	   <string name="lima">Lima</string>
+	    <string name="gramo">gramo:</string>
+	   <string name="metro">metro:</string>
+	   <string name="litro">litro:</string>
+	   <string name="nuevaUnidad_titulo">Nueva Unidad</string>
+	   <string name="miUnidad_titulo">Mi Unidad</string>
+	   <string name="nuevaUnidad_tipo">Tipo Unidad:</string>
+	   <string name="nuevaUnidad_nombre">Nombre:</string>
+	   <string name="nuevaUnidad_ab">Abreviatura:</string>
+	   <string name="nuevaUnidad_ref">Ref. metro:</string>
+	   <string name="nuevaUnidad_btnAceptar">Aceptar</string>
+	   <string name="nuevaUnidad_ejemplo">Ej. m</string>
+</resources>
