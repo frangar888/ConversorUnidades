@@ -18,9 +18,11 @@ import java.util.Locale;
 
 
 
+
 import datos.AccionesDB;
 import datos.Unidad;
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -50,16 +52,41 @@ public class ActivityConversion extends Activity {
 	private TextView tvAux;
 	private Integer idTipoUnidad = 0;
 	private String nombreTipoUnidad;
-	private double resultado;
-	private int seleccion1;
-	private int seleccion2;
+	private Double resConversion;
 	private Double cotizacion;
-	private String valorIng="";
-	private ArrayList<String> resultados = new ArrayList<String>();
+	private ArrayList<String> results = new ArrayList<String>();
+	@Override
+	    protected void onSaveInstanceState(Bundle outState) {
+		if(outState!=null){
+	    	super.onSaveInstanceState(outState);
+	    	if (!results.isEmpty()) {
+	        	outState.putStringArrayList("resultados", results);
+	        }
+	    	if(resConversion!=null){
+	    		outState.putDouble("resConversion", resConversion);
+	    	}
+		}
+	    }//Fin de onSaveInstanceState()
+    private void restoreMe(Bundle state){
+    	
+    	if (state!=null) {
+    		if(nombreTipoUnidad.equals("Moneda")){
+    			 resConversion = state.getDouble("resConversion");
+    			tvAux.setText("Resultado:        "+resConversion.toString());
+    		}else{
+    	 results = state.getStringArrayList("resultados");
+    	 ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, state.getStringArrayList("resultados"));
+    	 lv2.setAdapter(adapter);
+    		}
+    	}
+    	
+     }//Fin de restoreMe()
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activityconversion);
+		 
+		    
 		btn1 = (Button)findViewById(R.id.btn1);
 		btn2 = (Button)findViewById(R.id.btn2);
 		et1 = (EditText)findViewById(R.id.et1);
@@ -67,14 +94,8 @@ public class ActivityConversion extends Activity {
 		lv2 = (ListView)findViewById(R.id.lv2);
 		spAux = (Spinner)findViewById(R.id.spAux);
 		tvAux = (TextView)findViewById(R.id.tvAux);
-		if(!valorIng.equals("")){
-			et1.setText(valorIng);
-		}
+	
 		
-		if(!resultados.isEmpty()){
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, resultados);
-			lv2.setAdapter(adapter);
-		}
 		if(Configuracion.getTema().equals("Lima")){
     		getWindow().getDecorView().setBackgroundColor(Color.parseColor("#CDDC39"));
     		
@@ -123,8 +144,7 @@ public class ActivityConversion extends Activity {
 				}
 			
 	
-		//btn1.setBackgroundColor(Color.argb(255, 102, 153, 255));
-		//btn2.setBackgroundColor(Color.argb(255, 224, 49, 81));
+
 		
 		Bundle bundle = getIntent().getExtras();
 		nombreTipoUnidad = bundle.getString("tipo_unidad");
@@ -134,11 +154,13 @@ public class ActivityConversion extends Activity {
 		tvAux.setTypeface(font);
 		ArrayList<Unidad> listaUnidades = new ArrayList<Unidad>();
 		ArrayList<String> listaUstring = new ArrayList<String>();
+		
 		if(!nombreTipoUnidad.equals("Moneda")){
 			spAux.setVisibility(View.GONE);
 			tvAux.setVisibility(View.GONE);
 		listaUnidades = AccionesDB.consultaUnidad(nombreTipoUnidad,this,idTipoUnidad);
 		listaUstring=new ArrayList<String>();
+		
 		if(nombreTipoUnidad.equals("Temperatura")){
 			String nombreUnidad="";
 			for(int i=0;i<listaUnidades.size();i++){
@@ -161,160 +183,160 @@ public class ActivityConversion extends Activity {
 		Collections.sort(listaUstring);
 		}else{
 			
-			tvAux.setText("Resultado: ");
+			tvAux.setText("Resultado:         0.0");
 			lv2.setVisibility(View.GONE);
 			listaUstring=new ArrayList<String>();
-			listaUstring.add("AFA-Afghanistan Afghani");
-			listaUstring.add("ALL-Albanian Lek");
-			listaUstring.add("DZD-Algerian Dinar");
-			listaUstring.add("ARS-Argentine Peso");
+			listaUstring.add("AFA-Afghani Afghanistan ");
+			listaUstring.add("ALL-Lek albanés");
+			listaUstring.add("DZD-Dinar argelino");
+			listaUstring.add("ARS-Peso Argentino");
 			listaUstring.add("AWG-Aruba Florin");
-			listaUstring.add("AUD-Australian Dollar");
-			listaUstring.add("BSD-Bahamian Dollar");
-			listaUstring.add("BHD-Bahraini Dinar");
+			listaUstring.add("AUD-Dolar Australiano");
+			listaUstring.add("BSD-Dolar de las Bahamas");
+			listaUstring.add("BHD-Dinar de Bahrein");
 			listaUstring.add("BDT-Bangladesh Taka");
-			listaUstring.add("BBD-Barbados Dollar");
-			listaUstring.add("BZD-Belize Dollar");
-			listaUstring.add("BMD-Bermuda Dollar");
-			listaUstring.add("BTN-Bhutan Ngultrum");
-			listaUstring.add("BOB-Bolivian Boliviano");
-			listaUstring.add("BWP-Botswana Pula");
-			listaUstring.add("BRL-Brazilian Real");
-			listaUstring.add("GBP-British Pound");
-			listaUstring.add("BND-Brunei Dollar");
-			listaUstring.add("BIF-Burundi Franc");
+			listaUstring.add("BBD-Dolar de Barbados");
+			listaUstring.add("BZD-Dolar de Belize");
+			listaUstring.add("BMD-Dolar de Bermuda");
+			listaUstring.add("BTN-Bhután Ngultrum");
+			listaUstring.add("BOB-Peso Boliviano");
+			listaUstring.add("BWP-Pula de Botswana");
+			listaUstring.add("BRL-Real Brasilero");
+			listaUstring.add("GBP-Libra Esterlina");
+			listaUstring.add("BND-Dolar de Brunei");
+			listaUstring.add("BIF-Franco Burundi");
 			listaUstring.add("XOF-CFA Franc (BCEAO)");
 			listaUstring.add("XAF-CFA Franc (BEAC)");
-			listaUstring.add("KHR-Cambodia Riel");
-			listaUstring.add("CAD-Canadian Dollar");
-			listaUstring.add("CVE-Cape Verde Escudo");
-		    listaUstring.add("KYD-Cayman Islands Dollar");
-		    listaUstring.add("CLP-Chilean Peso");
-		    listaUstring.add("CNY-Chinese Yuan");
-		    listaUstring.add("COP-Colombian Peso");
-		    listaUstring.add("KMF-Comoros Franc");
-		    listaUstring.add("CRC-Costa Rica Colon");
-		    listaUstring.add("HRK-Croatian Kuna");
-		    listaUstring.add("CUP-Cuban Peso");
-		    listaUstring.add("CYP-Cyprus Pound");
-		    listaUstring.add("CZK-Czech Koruna");
-		    listaUstring.add("DKK-Danish Krone");
-		    listaUstring.add("DJF-Dijibouti Franc");
-		    listaUstring.add("DOP-Dominican Peso");
-		    listaUstring.add("XCD-East Caribbean Dollar");
-		    listaUstring.add("EGP-Egyptian Pound");
-		    listaUstring.add("SVC-El Salvador Colon");
-		    listaUstring.add("EEK-Estonian Kroon");
-		    listaUstring.add("ETB-Ethiopian Birr");
+			listaUstring.add("KHR-Riel camboyano");
+			listaUstring.add("CAD-Dolar Canadiense");
+			listaUstring.add("CVE-Escudo de Cabo Verde");
+		    listaUstring.add("KYD-Dolar de las Islas Caiman");
+		    listaUstring.add("CLP-Peso Chileno");
+		    listaUstring.add("CNY-Yuan chino");
+		    listaUstring.add("COP-Peso Colombiano");
+		    listaUstring.add("KMF-Franco Comoro");
+		    listaUstring.add("CRC-Colon de Costa Rica");
+		    listaUstring.add("HRK-Kuna croata");
+		    listaUstring.add("CUP-Peso Cubano");
+		    listaUstring.add("CYP-Libra chipriota");
+		    listaUstring.add("CZK-Corona checa");
+		    listaUstring.add("DKK-Corona danesa");
+		    listaUstring.add("DJF-Franco Dijibouti");
+		    listaUstring.add("DOP-Peso Dominicano");
+		    listaUstring.add("XCD-Dólar del Caribe Oriental");
+		    listaUstring.add("EGP-Libra Egipcia");
+		    listaUstring.add("SVC-Colón de El Salvador");
+		    listaUstring.add("EEK-Corona estonia");
+		    listaUstring.add("ETB-Birr etíope");
 		    listaUstring.add("EUR-Euro");
-		    listaUstring.add("FKP-Falkland Islands Pound");
-		    listaUstring.add("GMD-Gambian Dalasi");
-		    listaUstring.add("GHC-Ghanian Cedi");
-		    listaUstring.add("GIP-Gibraltar Pound");
-		    listaUstring.add("XAU-Gold Ounces");
-		    listaUstring.add("GTQ-Guatemala Quetzal");
-		    listaUstring.add("GNF-Guinea Franc");
-		    listaUstring.add("GYD-Guyana Dollar");
-		    listaUstring.add("HTG-Haiti Gourde");
-		    listaUstring.add("HNL-Honduras Lempira");
-		    listaUstring.add("HKD-Hong Kong Dollar");
-		    listaUstring.add("HUF-Hungarian Forint");
-		    listaUstring.add("ISK-Iceland Krona");
-		    listaUstring.add("INR-Indian Rupee");
-		    listaUstring.add("IDR-Indonesian Rupiah");
-		    listaUstring.add("IQD-Iraqi Dinar");
-		    listaUstring.add("ILS-Israeli Shekel");
-		    listaUstring.add("JMD-Jamaican Dollar");
-		    listaUstring.add("JPY-Japanese Yen");
-		    listaUstring.add("JOD-Jordanian Dinar");
-		    listaUstring.add("KZT-Kazakhstan Tenge");
-		    listaUstring.add("KES-Kenyan Shilling");
-		    listaUstring.add("KRW-Korean Won");
-		    listaUstring.add("KWD-Kuwaiti Dinar");
+		    listaUstring.add("FKP-Libra malvinense");
+		    listaUstring.add("GMD-Dalasi de Gambia");
+		    listaUstring.add("GHC-Cedi de Ghana");
+		    listaUstring.add("GIP-Libra de Gibraltar");
+		    listaUstring.add("XAU-Onzas de oro");
+		    listaUstring.add("GTQ-Quetzal de Guatemala");
+		    listaUstring.add("GNF-Franco guineano");
+		    listaUstring.add("GYD-Dólar de Guyana");
+		    listaUstring.add("HTG-Gourde haitiano");
+		    listaUstring.add("HNL-Lempira de Honduras");
+		    listaUstring.add("HKD-Dólar de Hong Kong");
+		    listaUstring.add("HUF-Florín húngaro");
+		    listaUstring.add("ISK-Corona islandesa");
+		    listaUstring.add("INR-Rupia india");
+		    listaUstring.add("IDR-Rupia Indonesa");
+		    listaUstring.add("IQD-Dinar iraquí");
+		    listaUstring.add("ILS-Shekel israelí");
+		    listaUstring.add("JMD-Dólar Jamaiquino");
+		    listaUstring.add("JPY-Yen Japones");
+		    listaUstring.add("JOD-Dinar Jordano");
+		    listaUstring.add("KZT-Tenge de Kazajstán");
+		    listaUstring.add("KES-Chelín keniano");
+		    listaUstring.add("KRW-Won coreano");
+		    listaUstring.add("KWD-Dinar kuwaití");
 		    listaUstring.add("LAK-Lao Kip");
 		    listaUstring.add("LVL-Latvian Lat");
-		    listaUstring.add("LBP-Lebanese Pound");
-		    listaUstring.add("LSL-Lesotho Loti");
-		    listaUstring.add("LRD-Liberian Dollar");
-		    listaUstring.add("LYD-Libyan Dinar");
-		    listaUstring.add("LTL-Lithuanian Lita");
-		    listaUstring.add("MOP-Macau Pataca");
-		    listaUstring.add("MKD-Macedonian Denar");
-		    listaUstring.add("MGF-Malagasy Franc");
-		    listaUstring.add("MWK-Malawi Kwacha");
-		    listaUstring.add("MYR-Malaysian Ringgit");
-		    listaUstring.add("MVR-Maldives Rufiyaa");
-		    listaUstring.add("MTL-Maltese Lira");
-		    listaUstring.add("MRO-Mauritania Ougulya");
-		    listaUstring.add("MUR-Mauritius Rupee");
-		    listaUstring.add("MXN-Mexican Peso");
-		    listaUstring.add("MDL-Moldovan Leu");
-		    listaUstring.add("MNT-Mongolian Tugrik");
-		    listaUstring.add("MAD-Moroccan Dirham");
+		    listaUstring.add("LBP-Libra libanesa");
+		    listaUstring.add("LSL-Loti de Lesotho");
+		    listaUstring.add("LRD-Dólar liberiano");
+		    listaUstring.add("LYD-Dinar libio");
+		    listaUstring.add("LTL-Lita lituana");
+		    listaUstring.add("MOP-Pataca de Macao");
+		    listaUstring.add("MKD-Denar macedonio");
+		    listaUstring.add("MGF-Franco malgache");
+		    listaUstring.add("MWK-Kwacha Malawi");
+		    listaUstring.add("MYR-Ringgit malayo");
+		    listaUstring.add("MVR-Rupia de Maldivas");
+		    listaUstring.add("MTL-Lira maltesa");
+		    listaUstring.add("MRO-Ouguiya de Mauritania");
+		    listaUstring.add("MUR-Rupia de Mauricio");
+		    listaUstring.add("MXN-Peso Mexicano");
+		    listaUstring.add("MDL-Leu moldavo");
+		    listaUstring.add("MNT-Tugrik mongol");
+		    listaUstring.add("MAD-Dirham marroquí");
 		    listaUstring.add("MZM-Mozambique Metical");
-		    listaUstring.add("MMK-Myanmar Kyat");
-		    listaUstring.add("NAD-Namibian Dollar");
-		    listaUstring.add("NPR-Nepalese Rupee");
-		    listaUstring.add("ANG-Neth Antilles Guilder");
-		    listaUstring.add("NZD-New Zealand Dollar");
-		    listaUstring.add("NIO-Nicaragua Cordoba");
-		    listaUstring.add("NGN-Nigerian Naira");
-		    listaUstring.add("KPW-North Korean Won");
-		    listaUstring.add("NOK-Norwegian Krone");
-		    listaUstring.add("OMR-Omani Rial");
-		    listaUstring.add("XPF-Pacific Franc");
-		    listaUstring.add("PKR-Pakistani Rupee");
-		    listaUstring.add("XPD-Palladium Ounces");
-		    listaUstring.add("PAB-Panama Balboa");
-		    listaUstring.add("PGK-Papua New Guinea Kina");
-		    listaUstring.add("PYG-Paraguayan Guarani");
-		    listaUstring.add("PEN-Peruvian Nuevo Sol");
-		    listaUstring.add("PHP-Philippine Peso");
-		    listaUstring.add("XPT-Platinum Ounces");
-		    listaUstring.add("PLN-Polish Zloty");
-		    listaUstring.add("QAR-Qatar Rial");
-		    listaUstring.add("ROL-Romanian Leu");
-		    listaUstring.add("RUB-Russian Rouble");
-		    listaUstring.add("WST-Samoa Tala");
+		    listaUstring.add("MMK-Kyat de Myanmar");
+		    listaUstring.add("NAD-Dólar de Namibia");
+		    listaUstring.add("NPR-Rupia nepalí");
+		    listaUstring.add("ANG-Guilder antillano");
+		    listaUstring.add("NZD-Dólar de Nueva Zelanda");
+		    listaUstring.add("NIO-Nicaragua Córdoba");
+		    listaUstring.add("NGN-Naira Nigeriana");
+		    listaUstring.add("KPW-Won de Corea del Norte");
+		    listaUstring.add("NOK-Corona Noruega");
+		    listaUstring.add("OMR-Rial omaní");
+		    listaUstring.add("XPF-Franco Pacífico");
+		    listaUstring.add("PKR-Rupia Pakistani");
+		    listaUstring.add("XPD-Onzas de paladio");
+		    listaUstring.add("PAB-Panamá Balboa");
+		    listaUstring.add("PGK-Kina de Papúa Nueva Guinea");
+		    listaUstring.add("PYG-Guaraní Paraguayo");
+		    listaUstring.add("PEN-Nuevo Sol Peruano");
+		    listaUstring.add("PHP-Peso Filipino");
+		    listaUstring.add("XPT-Onzas de Platino");
+		    listaUstring.add("PLN-Zloty polaco");
+		    listaUstring.add("QAR-Rial Qatarí");
+		    listaUstring.add("ROL-Leu rumano");
+		    listaUstring.add("RUB-Rublo Ruso");
+		    listaUstring.add("WST-Tala de Samoa");
 		    listaUstring.add("STD-Sao Tome Dobra");
-		    listaUstring.add("SAR-Saudi Arabian Riyal");
-		    listaUstring.add("SCR-Seychelles Rupee");
-		    listaUstring.add("SLL-Sierra Leone Leone");
-		    listaUstring.add("XAG-Silver Ounces");
-		    listaUstring.add("SGD-Singapore Dollar");
-		    listaUstring.add("SKK-Slovak Koruna");
-		    listaUstring.add("SIT-Slovenian Tolar");
-		    listaUstring.add("SBD-Solomon Islands Dollar");
-		    listaUstring.add("SOS-Somali Shilling");
-		    listaUstring.add("ZAR-South African Rand");
-		    listaUstring.add("LKR-Sri Lanka Rupee");
-		    listaUstring.add("SHP-St Helena Pound");
-		    listaUstring.add("SDD-Sudanese Dinar");
-		    listaUstring.add("SRG-Surinam Guilder");
-		    listaUstring.add("SZL-Swaziland Lilageni");
-		    listaUstring.add("SEK-Swedish Krona");
-		    listaUstring.add("TRY-Turkey Lira");
-		    listaUstring.add("CHF-Swiss Franc");
-		    listaUstring.add("SYP-Syrian Pound");
-		    listaUstring.add("TWD-Taiwan Dollar");
-		    listaUstring.add("TZS-Tanzanian Shilling");
-		    listaUstring.add("THB-Thai Baht");
+		    listaUstring.add("SAR-Riyal saudí");
+		    listaUstring.add("SCR-Rupia de Seychelles");
+		    listaUstring.add("SLL-Leona de Sierra Leona");
+		    listaUstring.add("XAG-Onzas de Plata");
+		    listaUstring.add("SGD-Dólar de Singapur");
+		    listaUstring.add("SKK-Corona Eslovaca");
+		    listaUstring.add("SIT-Tolar esloveno");
+		    listaUstring.add("SBD-Dólar de las Islas Salomón");
+		    listaUstring.add("SOS-Chelín somalí");
+		    listaUstring.add("ZAR-Rand sudafricano");
+		    listaUstring.add("LKR-Rupia de Sri Lanka");
+		    listaUstring.add("SHP-Libra de Santa Helena");
+		    listaUstring.add("SDD-Dinar Sudanes");
+		    listaUstring.add("SRG-Guilder de Surinám");
+		    listaUstring.add("SZL-Lilangeni de Suazilandia");
+		    listaUstring.add("SEK-Corona Sueca");
+		    listaUstring.add("TRY-Lira Turca");
+		    listaUstring.add("CHF-Franco Suizo");
+		    listaUstring.add("SYP-Libra Siria");
+		    listaUstring.add("TWD-Dólar de Taiwan");
+		    listaUstring.add("TZS-Shilling tanzano");
+		    listaUstring.add("THB-Baht tailandés");
 		    listaUstring.add("TOP-Tonga Pa'anga");
-		    listaUstring.add("TTD-Trinidad&amp;Tobago Dollar");
-		    listaUstring.add("TND-Tunisian Dinar");
-		    listaUstring.add("TRL-Turkish Lira");
-			listaUstring.add("USD-U.S. Dollar");
-			listaUstring.add("AED-UAE Dirham");
-			listaUstring.add("UGX-Ugandan Shilling");
-			listaUstring.add("UAH-Ukraine Hryvnia");
-			listaUstring.add("UYU-Uruguayan New Peso");
+		    listaUstring.add("TTD-Dólar de Trinidad&amp;Tobago");
+		    listaUstring.add("TND-Dinar tunecino");
+		    listaUstring.add("TRL-Lira Turca");
+			listaUstring.add("USD-Dólar estadounidense");
+			listaUstring.add("AED-Dirham de EAU");
+			listaUstring.add("UGX-Chelín ugandés");
+			listaUstring.add("UAH-Hryvnia de Ucrania");
+			listaUstring.add("UYU-Peso Uruguayo");
 			listaUstring.add("VUV-Vanuatu Vatu");
-			listaUstring.add("VEB-Venezuelan Bolivar");
-			listaUstring.add("VND-Vietnam Dong");
-			listaUstring.add("YER-Yemen Riyal");
-			listaUstring.add("YUM-Yugoslav Dinar");
-			listaUstring.add("ZMK-Zambian Kwacha");
-			listaUstring.add("ZWD-Zimbabwe Dollar");
+			listaUstring.add("VEB-Bolivar Venezolano");
+			listaUstring.add("VND-Dong de Vietnam");
+			listaUstring.add("YER-Rial yemení");
+			listaUstring.add("YUM-Dinar Yugoslavo");
+			listaUstring.add("ZMK-Kwacha zambiano");
+			listaUstring.add("ZWD-Dólar de Zimbabwe");
 			Collections.sort(listaUstring);
 		}
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, listaUstring);
@@ -322,7 +344,7 @@ public class ActivityConversion extends Activity {
         lv2.setAdapter(adapter);
         spAux.setAdapter(adapter);
 		
-		
+        restoreMe(savedInstanceState); 
        
 	}
 	
@@ -330,17 +352,14 @@ public class ActivityConversion extends Activity {
 	   
 	   public void calcular(View view){
 		   if(!nombreTipoUnidad.equals("Moneda")){
+		   results.clear();
 		   String unidadSelec = sp1.getSelectedItem().toString();
-		  // int unidadSelecIdList = sp1.getSelectedItemPosition();
 		   double valor = 0;
-		   //Toast.makeText(this, "\u00b0C", Toast.LENGTH_SHORT).show();
 		   if(et1.getText().toString().equals("") || et1.getText().toString().equals(null)){
-			   
 			   Toast.makeText(this,getString(R.string.activityConversion_ingValor, (Object[])null), Toast.LENGTH_LONG).show();
-			   
 		   }else{
 		   valor =Double.parseDouble(et1.getText().toString());
-		   valorIng= et1.getText().toString();
+		   //valorIng= et1.getText().toString();
 		   ArrayList<Double> refsResultadosTodos = new ArrayList<Double>();
 		   ArrayList<String> nombresTodos = new ArrayList<String>();
 		   ArrayList<String> resultadosTodos = new ArrayList<String>();
@@ -373,19 +392,21 @@ public class ActivityConversion extends Activity {
 			  resultadoFinal = r1/refsResultadosTodos.get(i);
 			  int resultadoFinalInt = resultadoFinal.intValue();
 			  if(resultadoFinal == resultadoFinalInt){
-				  resultadosTodos.add(nombresTodos.get(i)+" "+resultadoFinalInt);
-				  
+				  results.add(nombresTodos.get(i)+" "+resultadoFinalInt);
+				 
 			  }else{
 				  DecimalFormat formateador = new DecimalFormat("0.000000");
 				  resFinal = formateador.format(resultadoFinal);
-				  resultadosTodos.add(nombresTodos.get(i)+" "+resFinal);
+				  results.add(nombresTodos.get(i)+" "+resFinal);
+				 
 			  }
 			  
 			 
 		   }
-		   resultados = resultadosTodos;
-		   Collections.sort(resultadosTodos);
-		   ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, resultadosTodos);
+		  
+		   Collections.sort(results);
+		  
+		   ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, results);
 		   
 		   lv2.setAdapter(adapter);
 		   db.close(); 
@@ -394,7 +415,6 @@ public class ActivityConversion extends Activity {
 		   if (et1.length() > 0) {
 			   String from = sp1.getSelectedItem().toString().substring(0, 3);
 			   String to = spAux.getSelectedItem().toString().substring(0, 3);
-			   //Toast.makeText(this, to, Toast.LENGTH_SHORT).show();
                getCotizacion(from, to);
            } else {
                Toast.makeText(this, R.string.activityConversion_ingValor, Toast.LENGTH_LONG).show();
@@ -411,10 +431,12 @@ public class ActivityConversion extends Activity {
 				listaUstring.add(listaUnidades.get(i).getNombre_unidad());
 			}
 			Collections.sort(listaUstring);
+			results = listaUstring;
+			resConversion = null;
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, listaUstring);
 	        lv2.setAdapter(adapter);
 	        et1.setText("");
-	        tvAux.setText("Resultado: ");
+	        tvAux.setText("Resultado:         0.0");
 	   }
 	   
 	   public Handler handler = new Handler(new Handler.Callback() {
@@ -426,7 +448,8 @@ public class ActivityConversion extends Activity {
 	                case 0:
 	                	Double valor = Double.parseDouble(et1.getText().toString());
 	                	Double resultado = valor*cotizacion;
-	                    tvAux.setText("Resultado:        "+resultado.toString());
+	                	resConversion = resultado;
+	                    tvAux.setText("Resultado:        "+resConversion.toString());
 	                    break;
 	            }
 	            return false;
