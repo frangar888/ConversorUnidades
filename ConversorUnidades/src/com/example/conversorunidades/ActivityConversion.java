@@ -1,28 +1,12 @@
 package com.example.conversorunidades;
 
-
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
-
-
-
-
-
-
-
-
-
-
-
-
-
 import datos.AccionesDB;
 import datos.Unidad;
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -31,7 +15,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.InputType;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -362,7 +345,7 @@ public class ActivityConversion extends Activity {
 		   //valorIng= et1.getText().toString();
 		   ArrayList<Double> refsResultadosTodos = new ArrayList<Double>();
 		   ArrayList<String> nombresTodos = new ArrayList<String>();
-		   ArrayList<String> resultadosTodos = new ArrayList<String>();
+		  
 		   AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, AdminSQLiteOpenHelper.DB_NAME, null, AdminSQLiteOpenHelper.versionDB);
 		   SQLiteDatabase db =admin.getWritableDatabase();
 		   String args [] = {unidadSelec};

@@ -2,16 +2,11 @@ package com.example.conversorunidades;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
-
-
-
 import java.util.Locale;
-
 import datos.AccionesDB;
 import datos.TipoUnidad;
 import datos.Unidad;
@@ -33,7 +28,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -160,36 +154,37 @@ public class MainActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-    public void altaTUarchivo(String archTipoUnidad) {
-    	File tarjeta = Environment.getExternalStorageDirectory();
-    	File file1 = new File(tarjeta.getAbsolutePath(), archTipoUnidad);
-        ArrayList<TipoUnidad> listadoTipoUnidades = new ArrayList<TipoUnidad>();    	
-        try{
-    		FileInputStream fIn1 = new FileInputStream(file1);
-            InputStreamReader archivo1 = new InputStreamReader(fIn1);
-            BufferedReader br1 = new BufferedReader(archivo1);
-            String linea1 = br1.readLine();
-            ArrayList<String> listado1 = new ArrayList<String>();
-            while (linea1 != null){
-            	listado1.add(linea1);
-            	linea1 = br1.readLine();
-            }
-            
-            int id_tipo_unidad=1;
-            for(int i=0; i<listado1.size();i++){
-            	TipoUnidad tu=new TipoUnidad(id_tipo_unidad,listado1.get(i));
-            	listadoTipoUnidades.add(tu);
-            	id_tipo_unidad=id_tipo_unidad+1;
-            }
-            
-            br1.close();
-            archivo1.close();
-            
-        
-    	}catch(IOException e){
-    		Log.e("error", "errorIO");
-    	}
-    
+    public void altaTUarchivo(/*String archTipoUnidad*/) {
+    	   InputStream flujo=null;
+    	    BufferedReader lector;
+    	    ArrayList<TipoUnidad> listadoTipoUnidades = new ArrayList<TipoUnidad>(); 
+    	    try
+    	    {
+    	        flujo= getResources().openRawResource(R.raw.tipo_unidad1);
+    	 
+    	        lector=new BufferedReader(new InputStreamReader(flujo));
+    	 
+    	        
+                String linea1 = lector.readLine();
+                ArrayList<String> listado1 = new ArrayList<String>();
+                while (linea1 != null){
+                	listado1.add(linea1);
+                	linea1 = lector.readLine();
+                }
+                
+                int id_tipo_unidad=1;
+                for(int i=0; i<listado1.size();i++){
+                	TipoUnidad tu=new TipoUnidad(id_tipo_unidad,listado1.get(i));
+                	listadoTipoUnidades.add(tu);
+                	id_tipo_unidad=id_tipo_unidad+1;
+                }
+                
+                lector.close();
+    	      
+    	    }
+    	    catch (Exception ex){
+    	    	ex.printStackTrace();
+    	    }
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,
                 AdminSQLiteOpenHelper.DB_NAME, null, AdminSQLiteOpenHelper.versionDB);
         SQLiteDatabase db=admin.getWritableDatabase();
@@ -206,20 +201,24 @@ public class MainActivity extends ActionBarActivity {
        
   
     }
-    public void altaUarchivo(String archUnidad) {
+    public void altaUarchivo(/*String archUnidad*/) {
     	
-    	File tarjeta = Environment.getExternalStorageDirectory();
-        File file = new File(tarjeta.getAbsolutePath(), archUnidad);
+    	
         ArrayList<Unidad> listadoUnidades = new ArrayList<Unidad>();
-        try{
-    		FileInputStream fIn = new FileInputStream(file);
-            InputStreamReader archivo = new InputStreamReader(fIn);
-            BufferedReader br = new BufferedReader(archivo);
-            String linea = br.readLine();
+        InputStream flujo=null;
+	    BufferedReader lector;
+        try
+	    {
+	        flujo= getResources().openRawResource(R.raw.unidad1);
+	 
+	        lector=new BufferedReader(new InputStreamReader(flujo));
+	 
+	        
+            String linea1 = lector.readLine();
             ArrayList<String> listado = new ArrayList<String>();
-            while (linea != null) {
-            	listado.add(linea);
-            	linea=br.readLine();
+            while (linea1 != null){
+            	listado.add(linea1);
+            	linea1 = lector.readLine();
             }
             int id_unidad=1;
             for(int i=0; i<listado.size();i++){
@@ -229,8 +228,8 @@ public class MainActivity extends ActionBarActivity {
             	id_unidad=id_unidad+1;
             }
             
-            br.close();
-            archivo.close();
+            lector.close();
+            
         
     	}catch(IOException e){
     		Log.e("error", "errorIO");
@@ -367,6 +366,27 @@ public class MainActivity extends ActionBarActivity {
    	 bd.close();
     }
     
+    public boolean TUisEmpty(){
+    	AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,
+                AdminSQLiteOpenHelper.DB_NAME, null, AdminSQLiteOpenHelper.versionDB);
+   	 SQLiteDatabase bd=admin.getWritableDatabase();
+   	Cursor fila = bd.rawQuery("select * from tipo_unidad", null);
+   	if(fila.moveToFirst()){
+   		return false;
+   	}
+   	return true;
+    }
+    
+    public boolean UisEmpty(){
+    	AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,
+                AdminSQLiteOpenHelper.DB_NAME, null, AdminSQLiteOpenHelper.versionDB);
+   	 SQLiteDatabase bd=admin.getWritableDatabase();
+   	Cursor fila = bd.rawQuery("select * from unidad", null);
+   	if(fila.moveToFirst()){
+   		return false;
+   	}
+   	return true;
+    }
 
     
     public String getDBColor(){
@@ -391,22 +411,12 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected Void doInBackground(Void... params) {
         
-  			
-  			if(checkUpdatesTipoUnidad()){
-  				int newVersion = getVersionTUenTabla()+1;
-  				altaTUarchivo(getNombreTUenTabla()+newVersion+".txt");
-  				actualizarVersionArchivoTU(getNombreTUenTabla(), newVersion);
-  			}else{
-  				altaTUarchivo(getNombreTUenTabla()+getVersionTUenTabla()+".txt");
+        	if(TUisEmpty()){
+        		altaTUarchivo();
+        	}
+  			if(UisEmpty()){
+  				altaUarchivo();
   			}
-  			if(checkUpdatesUnidad()){
-  				int newVersion = getVersionUenTabla()+1;
-  				altaUarchivo(getNombreUenTabla()+newVersion+".txt");
-  				actualizarVersionArchivoU(getNombreUenTabla(), newVersion);
-  			}else{
-  				altaUarchivo(getNombreUenTabla()+getVersionUenTabla()+".txt");
-  			}
-  			
         			cancel(true);
                     
             

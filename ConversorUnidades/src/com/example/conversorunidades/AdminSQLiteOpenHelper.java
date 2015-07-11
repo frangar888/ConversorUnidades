@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 	public static String DB_NAME="myDB";
-	public static int versionDB=14;
+	public static int versionDB=15;
 	public AdminSQLiteOpenHelper(Context context, String nombre, CursorFactory factory, int version) {
         super(context, nombre, factory, version);
     }
