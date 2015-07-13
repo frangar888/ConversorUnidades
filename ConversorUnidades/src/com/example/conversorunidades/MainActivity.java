@@ -85,7 +85,9 @@ public class MainActivity extends ActionBarActivity {
 	  					
 	  				}
 	  			}
-	  		
+	  			if(TUisEmpty()){
+	        		altaTUarchivo();
+	        	}
 		ArrayList<TipoUnidad> listaTU=AccionesDB.consultaTipoUnidad(this);
 		
 		ArrayList<String> listaTUstring=new ArrayList<String>();
@@ -95,6 +97,8 @@ public class MainActivity extends ActionBarActivity {
 		}
 		
 		int size = listaTUstring.size();
+		
+		
 		 String[] itemname ={
 				 listaTUstring.get(size-size),
 				 listaTUstring.get(size-size+1),
@@ -102,7 +106,7 @@ public class MainActivity extends ActionBarActivity {
 				 listaTUstring.get(size-size+3),
 				 "Moneda"
 				 };
-				 
+		
 				 Integer[] imgid={
 				 R.drawable.icon,
 				 R.drawable.icon2,
@@ -155,6 +159,7 @@ public class MainActivity extends ActionBarActivity {
 	}
 	
     public void altaTUarchivo(/*String archTipoUnidad*/) {
+   
     	   InputStream flujo=null;
     	    BufferedReader lector;
     	    ArrayList<TipoUnidad> listadoTipoUnidades = new ArrayList<TipoUnidad>(); 
@@ -411,9 +416,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected Void doInBackground(Void... params) {
         
-        	if(TUisEmpty()){
-        		altaTUarchivo();
-        	}
+        	
   			if(UisEmpty()){
   				altaUarchivo();
   			}
