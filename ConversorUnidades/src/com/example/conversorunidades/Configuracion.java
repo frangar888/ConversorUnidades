@@ -27,6 +27,7 @@ public class Configuracion extends Activity {
 	private Button btnConfigGuardar;
 	private TextView tvTema;
 	private static String tema="";
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.configuracion);
@@ -179,19 +180,11 @@ public class Configuracion extends Activity {
 			AccionesDB.updateConfig("pt",tema,this);
 		}
 		
-		
-		
-		
-		
-		
 		ma.ac.finish();
 		finish();
 		Intent i = new Intent(this, MainActivity.class);
 		startActivity(i); 
 		
-		
-		
-        
 	}
 	
 	public static String getTema() {

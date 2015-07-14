@@ -52,7 +52,7 @@ public class MainActivity extends ActionBarActivity {
 		tarea1.execute();
 		Configuration config =getResources().getConfiguration();
 			
-			  
+			  //Seteo el lenguage de la app segun el seleccionado por el usuario la ultima vez que se ejecuto
 	  			if(!config.locale.getLanguage().equals(AccionesDB.getDBLanguage(this))){
 	  				switch(AccionesDB.getDBLanguage(this)){
 	  				case "es":
@@ -85,20 +85,20 @@ public class MainActivity extends ActionBarActivity {
 	  					
 	  				}
 	  			}
-	  			if(TUisEmpty()){
-	        		altaTUarchivo();
+	  	//Chequeo si es la primera vez que se ejecuta la app. Si es asi cargo los tipos de unidades en la BD desde el archivo.
+	  	if(TUisEmpty()){
+	        altaTUarchivo();
 	        	}
+	  	
+	  	//Obtengo los tipos de unidades desde la BD
 		ArrayList<TipoUnidad> listaTU=AccionesDB.consultaTipoUnidad(this);
-		
 		ArrayList<String> listaTUstring=new ArrayList<String>();
-		
 		for(int i=0;i<listaTU.size();i++){
 			listaTUstring.add(listaTU.get(i).getNombre_tipo_unidad());
 		}
-		
 		int size = listaTUstring.size();
 		
-		
+		//Preparo el adapter para mostrar los tipos de unidades
 		 String[] itemname ={
 				 listaTUstring.get(size-size),
 				 listaTUstring.get(size-size+1),
@@ -114,7 +114,7 @@ public class MainActivity extends ActionBarActivity {
 				 R.drawable.icon3,
 				 R.drawable.icon5
 				 };
-		
+	
 		 CustomListAdapter adapter=new CustomListAdapter(this, itemname, imgid);
 		lv1.setAdapter(adapter);
 		lv1.setOnItemClickListener(new OnItemClickListener() {
@@ -158,36 +158,28 @@ public class MainActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-    public void altaTUarchivo(/*String archTipoUnidad*/) {
-   
-    	   InputStream flujo=null;
+	//Método para dar de alta los tipos de unidades desde el archivo de configuracion. Se lee del archivo y se carga en la BD.
+    public void altaTUarchivo() {
+    		InputStream flujo=null;
     	    BufferedReader lector;
     	    ArrayList<TipoUnidad> listadoTipoUnidades = new ArrayList<TipoUnidad>(); 
-    	    try
-    	    {
+    	    try{
     	        flujo= getResources().openRawResource(R.raw.tipo_unidad1);
-    	 
     	        lector=new BufferedReader(new InputStreamReader(flujo));
-    	 
-    	        
-                String linea1 = lector.readLine();
+    	        String linea1 = lector.readLine();
                 ArrayList<String> listado1 = new ArrayList<String>();
                 while (linea1 != null){
                 	listado1.add(linea1);
                 	linea1 = lector.readLine();
                 }
-                
                 int id_tipo_unidad=1;
                 for(int i=0; i<listado1.size();i++){
                 	TipoUnidad tu=new TipoUnidad(id_tipo_unidad,listado1.get(i));
                 	listadoTipoUnidades.add(tu);
                 	id_tipo_unidad=id_tipo_unidad+1;
                 }
-                
                 lector.close();
-    	      
-    	    }
-    	    catch (Exception ex){
+    	     }catch (Exception ex){
     	    	ex.printStackTrace();
     	    }
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,
@@ -202,24 +194,18 @@ public class MainActivity extends ActionBarActivity {
         }
        
       db.close();
-       
-       
-  
+      
     }
-    public void altaUarchivo(/*String archUnidad*/) {
-    	
-    	
-        ArrayList<Unidad> listadoUnidades = new ArrayList<Unidad>();
+    
+  //Método para dar de alta las unidades desde el archivo de configuracion. Se lee del archivo y se carga en la BD.
+    public void altaUarchivo() {
+    	ArrayList<Unidad> listadoUnidades = new ArrayList<Unidad>();
         InputStream flujo=null;
 	    BufferedReader lector;
-        try
-	    {
+        try{
 	        flujo= getResources().openRawResource(R.raw.unidad1);
-	 
 	        lector=new BufferedReader(new InputStreamReader(flujo));
-	 
-	        
-            String linea1 = lector.readLine();
+	        String linea1 = lector.readLine();
             ArrayList<String> listado = new ArrayList<String>();
             while (linea1 != null){
             	listado.add(linea1);
@@ -267,110 +253,7 @@ public class MainActivity extends ActionBarActivity {
         startActivity(i);
     }
     
-    public boolean checkUpdatesTipoUnidad(){
-     	String nomArchivo = getNombreTUenTabla()+getVersionTUenTabla()+".txt";
-    	File tarjeta = Environment.getExternalStorageDirectory();
-        File arch = new File(tarjeta.getAbsolutePath(),nomArchivo);
-        if(arch.exists()){
-        	  return false;
-          }
-          	  return true;
-    }
-    
-    public boolean checkUpdatesUnidad(){
-     	String nomArchivo = getNombreUenTabla()+getVersionUenTabla()+".txt";
-    	File tarjeta = Environment.getExternalStorageDirectory();
-        File arch = new File(tarjeta.getAbsolutePath(),nomArchivo);
-        if(arch.exists()){
-        	return false;
-        }
-          	return true;
-    }
-    
-    public String getNombreTUenTabla(){
-    	AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,
-                AdminSQLiteOpenHelper.DB_NAME, null, AdminSQLiteOpenHelper.versionDB);
-   	 SQLiteDatabase bd=admin.getWritableDatabase();
-   	 String nomArchivo="";
-	  Cursor fila = bd.rawQuery("select * from archivotu", null);
-     if (fila.moveToFirst()) {
-         //Recorremos el cursor hasta que no haya más registros
-         do {
-              nomArchivo = fila.getString(0);
-         } while(fila.moveToNext());
-    }
-     return nomArchivo;
-    }
-    
-    public String getNombreUenTabla(){
-    	AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,
-                AdminSQLiteOpenHelper.DB_NAME, null, AdminSQLiteOpenHelper.versionDB);
-   	 SQLiteDatabase bd=admin.getWritableDatabase();
-   	 String nomArchivo="";
-	  Cursor fila = bd.rawQuery("select * from archivou", null);
-     if (fila.moveToFirst()) {
-         //Recorremos el cursor hasta que no haya más registros
-         do {
-              nomArchivo = fila.getString(0);
-         } while(fila.moveToNext());
-    }
-     return nomArchivo;
-    }
-    
-    public int getVersionTUenTabla(){
-    	AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,
-                AdminSQLiteOpenHelper.DB_NAME, null, AdminSQLiteOpenHelper.versionDB);
-   	 SQLiteDatabase bd=admin.getWritableDatabase();
-   	 int verArchivo=0;
-	  Cursor fila = bd.rawQuery("select * from archivotu", null);
-     if (fila.moveToFirst()) {
-         //Recorremos el cursor hasta que no haya más registros
-         do {
-              verArchivo = fila.getInt(1);
-         } while(fila.moveToNext());
-    }
-     return verArchivo;
-    }
-    
-    public int getVersionUenTabla(){
-    	AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,
-                AdminSQLiteOpenHelper.DB_NAME, null, AdminSQLiteOpenHelper.versionDB);
-   	 SQLiteDatabase bd=admin.getWritableDatabase();
-   	 int verArchivo=0;
-	  Cursor fila = bd.rawQuery("select * from archivou", null);
-     if (fila.moveToFirst()) {
-         //Recorremos el cursor hasta que no haya más registros
-         do {
-              verArchivo = fila.getInt(1);
-         } while(fila.moveToNext());
-    }
-     return verArchivo;
-    }
-    
-    public void actualizarVersionArchivoTU(String nomArchivo, int newVersion){
-    	AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,
-                AdminSQLiteOpenHelper.DB_NAME, null, AdminSQLiteOpenHelper.versionDB);
-   	 SQLiteDatabase bd=admin.getWritableDatabase();
-   	 bd.execSQL("delete from archivotu");
-   	 ContentValues registro = new ContentValues();
-   	 registro.put("nombre_archivo",nomArchivo );
-   	 registro.put("version", newVersion);
-   	 bd.insert("archivotu", null, registro);
-   	 bd.close();
-    }
-    
-    public void actualizarVersionArchivoU(String nomArchivo, int newVersion){
-    	AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,
-                AdminSQLiteOpenHelper.DB_NAME, null, AdminSQLiteOpenHelper.versionDB);
-   	 SQLiteDatabase bd=admin.getWritableDatabase();
-   	 bd.execSQL("delete from archivou");
-   	 ContentValues registro = new ContentValues();
-   	 registro.put("nombre_archivo",nomArchivo );
-   	 registro.put("version", newVersion);
-   	 bd.insert("archivou", null, registro);
-   	 bd.close();
-    }
-    
+   //Devuelve true si la tabla tipo_unidad esta vacía
     public boolean TUisEmpty(){
     	AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,
                 AdminSQLiteOpenHelper.DB_NAME, null, AdminSQLiteOpenHelper.versionDB);
@@ -382,6 +265,7 @@ public class MainActivity extends ActionBarActivity {
    	return true;
     }
     
+  //Devuelve true si la tabla unidad esta vacía
     public boolean UisEmpty(){
     	AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,
                 AdminSQLiteOpenHelper.DB_NAME, null, AdminSQLiteOpenHelper.versionDB);
@@ -393,7 +277,7 @@ public class MainActivity extends ActionBarActivity {
    	return true;
     }
 
-    
+    //Obtiene el tema seleccionado por el usuario cuando ejecuto la app por ultima vez
     public String getDBColor(){
     	String color="";
     	AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this,
@@ -410,20 +294,15 @@ public class MainActivity extends ActionBarActivity {
    	 	return color;
     }
     
-
+    //AsyncTask para cargar las unidades en la BD al iniciar la app
     private class MiTareaAsincrona extends AsyncTask<Void, Integer, Void> {
-    	 
-        @Override
+    	@Override
         protected Void doInBackground(Void... params) {
-        
-        	
-  			if(UisEmpty()){
+    		
+    		if(UisEmpty()){
   				altaUarchivo();
   			}
         			cancel(true);
-                    
-            
-     
             return null;
         }
      
@@ -435,9 +314,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onPreExecute() {
         	setContentView(R.layout.activity_main);
-        	
         	if(getDBColor().equals("Lima")){
-        		
         		getWindow().getDecorView().setBackgroundColor(Color.parseColor("#CDDC39"));
         		Configuracion.setTema("Lima");
         	}else if(getDBColor().equals("Naranja")){
@@ -450,7 +327,7 @@ public class MainActivity extends ActionBarActivity {
         		getWindow().getDecorView().setBackgroundColor(Color.parseColor("#F57C00"));
         		Configuracion.setTema("Naranja");
         	}
-        	pbar = (ProgressBar)findViewById(R.id.progressBar1);
+        	pbar = (ProgressBar)findViewById(R.id.pBarMain);
     		pbar.setIndeterminate(true);
         	lv1=(ListView)findViewById(R.id.lv1);
 			titulo=(TextView)findViewById(R.id.titulo);

@@ -5,16 +5,16 @@ public class ItemData {
 	String text;
 	Integer imageId;
 	public ItemData(String text, Integer imageId){
-	this.text=text;
-	this.imageId=imageId;
+		this.text=text;
+		this.imageId=imageId;
 	}
 
 	public String getText(){
-	return text;
+		return text;
 	}
 
 	public Integer getImageId(){
-	return imageId;
+		return imageId;
 	}
 	
 	

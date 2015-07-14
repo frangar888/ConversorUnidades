@@ -37,9 +37,9 @@ public class MiUnidad extends Activity {
 	private TextView tvNombre;
 	private TextView tvMiUnidad;
 	private Button btnAceptar;
-	
 	private int idU;
 	private String nomU;
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.miunidad);
@@ -124,36 +124,36 @@ public class MiUnidad extends Activity {
 			listaTUstring.add(listaTU.get(i).getNombre_tipo_unidad());
 		}
 		ArrayAdapter <String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, listaTUstring);
-		 sp3.setAdapter(adapter);
-		 	sp3.setOnItemSelectedListener(new OnItemSelectedListener() {
-		 		public void onItemSelected(AdapterView<?> parent, View view, 
-		 	            int pos, long id) {
-		 			String tUnidad = "";
-		        	if(sp3.getItemAtPosition(pos).equals("Longitud")){
-		        	 tUnidad = "metro:";
-		        	}
-		        	if(sp3.getItemAtPosition(pos).equals("Masa")){
-		            	 tUnidad = "gramo:";
-		            	}
-		        	if(sp3.getItemAtPosition(pos).equals("Volumen")){
-		            	 tUnidad = "litro:";
-		            	}
-		        	if(sp3.getItemAtPosition(pos).equals("Temperatura")){
-		            	 tUnidad = "\u00b0C:";
-		            	}
-		            tvRefMetro.setText("Ref. "+tUnidad );
-		 	    }
-		 		 public void onNothingSelected(AdapterView<?> parent) {
-		 	        // Another interface callback
+		sp3.setAdapter(adapter);
+		sp3.setOnItemSelectedListener(new OnItemSelectedListener() {
+		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+		 	String tUnidad = "";
+		    if(sp3.getItemAtPosition(pos).equals("Longitud")){
+		       tUnidad = "metro:";
+		    }
+		    if(sp3.getItemAtPosition(pos).equals("Masa")){
+		       tUnidad = "gramo:";
+		    }
+		    if(sp3.getItemAtPosition(pos).equals("Volumen")){
+		       tUnidad = "litro:";
+		    }
+		    if(sp3.getItemAtPosition(pos).equals("Temperatura")){
+		       tUnidad = "\u00b0C:";
+		    }
+		    tvRefMetro.setText("Ref. "+tUnidad );
+		 }
+		 
+		public void onNothingSelected(AdapterView<?> parent) {
+		 	       
 		 	    }
 			});
+		
 		Unidad u = AccionesDB.getMiUnidad(miUnidad, this);
 		nomU = miUnidad;
 		idU = u.getId_unidad();
 		String [] partes = miUnidad.split(Pattern.quote("("));
 		String un = partes[0].replace("(", "");
 		String ab = partes[1].replace(")", "");
-		
 		Double ref = u.getRef_unidad_padre();
 		sp3.setSelection(u.getId_tipo_unidad()-1, false);
 		et4.setText(ref.toString());
@@ -162,26 +162,21 @@ public class MiUnidad extends Activity {
 		
 	}
 	
-
-	
-	
-	 
-	 public void lanzarAyuda(View v){
+	public void lanzarAyuda(View v){
 		 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	        builder.setTitle(getString(R.string.miUnidad_ayuda, (Object[])null));
-	        builder.setMessage(getString(R.string.miUnidad_ejemplo, (Object[])null));
-	       
-	        builder.setPositiveButton("OK",null);
-	        builder.create();
-	        builder.show();
+	     builder.setTitle(getString(R.string.miUnidad_ayuda, (Object[])null));
+	     builder.setMessage(getString(R.string.miUnidad_ejemplo, (Object[])null));
+	     builder.setPositiveButton("OK",null);
+	     builder.create();
+	     builder.show();
 	 }
 	 
 	 public void modifMiUnidad(View v){
-	 String tUnidad = sp3.getSelectedItem().toString();
-	 if((et3.getText().toString().equals("") || et3.getText().toString().equals(null))||((et4.getText().toString().equals("") || et4.getText().toString().equals(null)))||((etAb.getText().toString().equals("") || etAb.getText().toString().equals(null)))){
-		 String mensaje = getString(R.string.nuevaUnidad_camposOblig);	
-		 Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show();
-	 }else{
+		 String tUnidad = sp3.getSelectedItem().toString();
+		 if((et3.getText().toString().equals("") || et3.getText().toString().equals(null))||((et4.getText().toString().equals("") || et4.getText().toString().equals(null)))||((etAb.getText().toString().equals("") || etAb.getText().toString().equals(null)))){
+			 String mensaje = getString(R.string.nuevaUnidad_camposOblig);	
+			 Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show();
+		 }else{
 			 double refUnidadPadre =Double.parseDouble(et4.getText().toString());
 			 String abUnidad = etAb.getText().toString();
 			 String nombreUnidad = et3.getText().toString();

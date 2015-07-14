@@ -37,6 +37,7 @@ public class NuevaUnidad extends Activity {
 	private EditText et2;
 	private EditText et3;
 	private EditText et5;
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.nuevaunidad);
@@ -57,9 +58,7 @@ public class NuevaUnidad extends Activity {
 		nUnom.setTypeface(font);
 		btnNuevaUnidad.setTypeface(font);
 		nUtU.setTypeface(font);
-		
 		Configuration config =getResources().getConfiguration();
-		
 		switch(AccionesDB.getDBLanguage(this)){
 		case "es":
 			Locale loc = new Locale("es", "US");
@@ -120,27 +119,26 @@ public class NuevaUnidad extends Activity {
 			listaTUstring.add(listaTU.get(i).getNombre_tipo_unidad());
 		}
 		ArrayAdapter <String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, listaTUstring);
-		 sp2.setAdapter(adapter);
-		 	sp2.setOnItemSelectedListener(new OnItemSelectedListener() {
-		 		public void onItemSelected(AdapterView<?> parent, View view, 
-		 	            int pos, long id) {
-		 			String tUnidad = "";
-		        	if(sp2.getItemAtPosition(pos).equals("Longitud")){
+		sp2.setAdapter(adapter);
+		sp2.setOnItemSelectedListener(new OnItemSelectedListener() {
+		 	public void onItemSelected(AdapterView<?> parent, View view,int pos, long id) {
+		 		String tUnidad = "";
+		        if(sp2.getItemAtPosition(pos).equals("Longitud")){
 		        	 tUnidad = getString(R.string.metro);
-		        	}
-		        	if(sp2.getItemAtPosition(pos).equals("Masa")){
+		        }
+		        if(sp2.getItemAtPosition(pos).equals("Masa")){
 		            	 tUnidad = getString(R.string.gramo);
-		            	}
-		        	if(sp2.getItemAtPosition(pos).equals("Volumen")){
+		        }
+		        if(sp2.getItemAtPosition(pos).equals("Volumen")){
 		            	 tUnidad =getString(R.string.litro);
-		            	}
-		        	if(sp2.getItemAtPosition(pos).equals("Temperatura")){
+		        }
+		        if(sp2.getItemAtPosition(pos).equals("Temperatura")){
 		            	 tUnidad = "\u00b0C:";
-		            	}
-		            tv6.setText("Ref. "+tUnidad );
-		 	    }
-		 		 public void onNothingSelected(AdapterView<?> parent) {
-		 	        // Another interface callback
+		        }
+		        tv6.setText("Ref. "+tUnidad );
+		 	 }
+		 	public void onNothingSelected(AdapterView<?> parent) {
+		 	       
 		 	    }
 			});
 		}
