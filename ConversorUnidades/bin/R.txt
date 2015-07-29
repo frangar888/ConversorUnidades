@@ -464,6 +464,7 @@ int string nuevaUnidad_tipo 0x7f0b0032
 int string nuevaUnidad_titulo 0x7f0b0030
 int string portugues 0x7f0b0029
 int string seleccione_tipo_unidad 0x7f0b0010
+int string verifiqueInternet 0x7f0b0038
 int style AppBaseTheme 0x7f0c008b
 int style AppTheme 0x7f0c008c
 int style TextAppearance_AppCompat_Base_CompactMenu_Dialog 0x7f0c0063

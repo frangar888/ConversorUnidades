@@ -8,6 +8,8 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import datos.MiAplicacion;
+
 import java.io.IOException;
 import java.net.Proxy;
 import java.net.SocketTimeoutException;
@@ -60,11 +62,11 @@ public class SoapRequests {
             data =  Double.parseDouble(resultsString.toString());
 
         } catch (SocketTimeoutException t) {
-            t.printStackTrace();
+        	t.printStackTrace();
         } catch (IOException i) {
-            i.printStackTrace();
+        	i.printStackTrace();
         } catch (Exception q) {
-            q.printStackTrace();
+        	q.printStackTrace();
         }
         return data;
     }

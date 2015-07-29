@@ -8,13 +8,12 @@ import datos.AccionesDB;
 import datos.TipoUnidad;
 import android.app.Activity;
 import android.app.AlertDialog;
-
 import android.content.Intent;
 import android.content.res.Configuration;
-
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -187,4 +186,19 @@ public class NuevaUnidad extends Activity {
 		 
 		
 	 }
+	 
+	 @Override
+	 public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    
+	   if (keyCode == KeyEvent.KEYCODE_BACK) {
+	    
+		   finish();
+		   Intent i = new Intent(this, MisUnidades.class );
+		     startActivity(i);
+	     // Si el listener devuelve true, significa que el evento esta procesado, y nadie debe hacer nada mas
+	     return true;
+	   }
+	 //para las demas cosas, se reenvia el evento al listener habitual
+	   return super.onKeyDown(keyCode, event);
+	 } 
 }

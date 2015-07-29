@@ -9,11 +9,13 @@ import datos.TipoUnidad;
 import datos.Unidad;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
-
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -193,15 +195,32 @@ public class MiUnidad extends Activity {
 				 	}else{
 				 	 AccionesDB.updateUnidad1(nomUnidadAb, refUnidadPadre, idTunidad, idU, this);	
 				 	 finish();
+				 	Intent i = new Intent(this, MisUnidades.class );
+			        startActivity(i);
 				 	}
 			 }else{
 				 AccionesDB.updateUnidad2(refUnidadPadre, idTunidad, idU, this);	
 			     finish();
+			     Intent i = new Intent(this, MisUnidades.class );
+			     startActivity(i);
 			     }
 		 }
 	 }
 	 
-
+	 @Override
+	 public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    
+	   if (keyCode == KeyEvent.KEYCODE_BACK) {
+	    
+		   finish();
+		   Intent i = new Intent(this, MisUnidades.class );
+		     startActivity(i);
+	     // Si el listener devuelve true, significa que el evento esta procesado, y nadie debe hacer nada mas
+	     return true;
+	   }
+	 //para las demas cosas, se reenvia el evento al listener habitual
+	   return super.onKeyDown(keyCode, event);
+	 } 
 	 
 
 

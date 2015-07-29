@@ -142,7 +142,7 @@ public class MisUnidades extends Activity{
 			 	 startActivity(i);
 	        break;
 	        case R.id.irAmodificar: 
-	        	//finish();
+	        	finish();
 	            Intent i1 = new Intent(this, MiUnidad.class);
 	            i1.putExtra("miUnidad", tituloMenu);
 	          	startActivity(i1);

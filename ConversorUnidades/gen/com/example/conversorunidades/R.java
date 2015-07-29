@@ -1368,6 +1368,7 @@ containing a value of this type.
         public static final int nuevaUnidad_titulo=0x7f0b0030;
         public static final int portugues=0x7f0b0029;
         public static final int seleccione_tipo_unidad=0x7f0b0010;
+        public static final int verifiqueInternet=0x7f0b0038;
     }
     public static final class style {
         /** 

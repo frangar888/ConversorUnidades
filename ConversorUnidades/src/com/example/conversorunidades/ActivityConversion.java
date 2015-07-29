@@ -6,8 +6,11 @@ import java.util.Collections;
 import java.util.Locale;
 
 import datos.AccionesDB;
+import datos.MiAplicacion;
 import datos.Unidad;
 import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,6 +18,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -456,6 +460,11 @@ public class ActivityConversion extends Activity {
 	                	resConversion = resultado;
 	                    tvAux.setText("Resultado:        "+resConversion.toString());
 	                    break;
+	                    
+	                case 1:
+	                	pbarConv.setVisibility(View.GONE);
+	                	Toast.makeText(MiAplicacion.getAppContext(),R.string.verifiqueInternet, Toast.LENGTH_LONG).show();
+	                	break;
 	            }
 	            return false;
 	        }
@@ -465,17 +474,25 @@ public class ActivityConversion extends Activity {
 		   pbarConv.setVisibility(View.VISIBLE);
        	pbarConv.setIndeterminate(true);
 	        new Thread(new Runnable() {
-
+	        	
+	    
 	            @Override
 	            public void run() {
-	            	
-	                SoapRequests ex = new SoapRequests();
+	            	try{
+	            	//Looper.prepare();
+	            	SoapRequests ex = new SoapRequests();
 	                cotizacion = ex.getConversionRate(fromCurr, toCurr);
 	                handler.sendEmptyMessage(0);
+	               
+	            	}catch(Exception e){
+	            		handler.sendEmptyMessage(1);
+	            	}
+	            	// Looper.loop();
 	                }
 	        }).start();
+	        
 	    }
 	
 	  
-	   
+
 }

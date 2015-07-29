@@ -43,4 +43,5 @@
 	   <string name="nuevaUnidad_ref">Ref. metro:</string>
 	   <string name="nuevaUnidad_btnAceptar">Aceptar</string>
 	   <string name="nuevaUnidad_ejemplo">Ej. m</string>
+	   <string name="verifiqueInternet">Verifique su conexión a Internet.</string>
 </resources>
